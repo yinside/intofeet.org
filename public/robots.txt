@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# InToFeet.org — a small, old-fashioned conversion site.
+Sitemap: https://www.intofeet.org/sitemap.xml

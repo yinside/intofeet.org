@@ -1,0 +1,13 @@
+/* TEAM */
+Site: InToFeet.org
+Contact: huyinside@gmail.com
+Location: The Internet
+
+/* SITE */
+Last update: 2026-11-12
+Language: English
+Doctype: HTML5
+Framework: Next.js (static export)
+Standards: HTML5, CSS3, JavaScript
+Icons: Original
+Software: A text editor and a pot of coffee
