@@ -548,9 +548,23 @@ main {
   border: 2px solid;
   border-color: var(--bevel-light) var(--bevel-dark) var(--bevel-dark)
     var(--bevel-light);
+  border-radius: 0;
   background: var(--button-bg);
   color: #000000;
   font: bold 12px var(--sans);
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.calc-unit-tag:hover {
+  background: #d0d0d0;
+}
+
+.calc-unit-tag:active {
+  border-color: var(--bevel-dark) var(--bevel-light) var(--bevel-light)
+    var(--bevel-dark);
 }
 
 .calc-hint {

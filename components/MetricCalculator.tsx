@@ -68,6 +68,30 @@ export default function MetricCalculator({
     setError("");
   }, [prefillFromQuery, initialPairId, initialPair]);
 
+  function handleLiveInput(raw: string) {
+    setInput(raw);
+    if (copyStatus) setCopyStatus("");
+
+    if (raw.trim() === "") {
+      setError("");
+      setResult(null);
+      return;
+    }
+
+    const validation = validateNumericInput(
+      raw,
+      METRIC_UNITS[pair.from].plural,
+    );
+    if (validation.value === undefined) {
+      setError(validation.error ?? "Please enter a valid number.");
+      setResult(null);
+      return;
+    }
+
+    setError("");
+    setResult(buildMetricResult(validation.value, pair));
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const validation = validateNumericInput(
@@ -149,11 +173,7 @@ export default function MetricCalculator({
                 autoComplete="off"
                 spellCheck={false}
                 value={input}
-                onChange={(event) => {
-                  setInput(event.target.value);
-                  if (error) setError("");
-                  if (copyStatus) setCopyStatus("");
-                }}
+                onChange={(event) => handleLiveInput(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     event.preventDefault();
@@ -163,14 +183,20 @@ export default function MetricCalculator({
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${hintId} ${errorId}` : hintId}
               />
-              <span className="calc-unit-tag" aria-hidden="true">
+              <button
+                className="calc-unit-tag"
+                type="button"
+                onClick={handleSwap}
+                title={`Switch input from ${METRIC_UNITS[pair.from].plural} to ${METRIC_UNITS[pair.to].plural}`}
+                aria-label={`Switch input from ${METRIC_UNITS[pair.from].plural} to ${METRIC_UNITS[pair.to].plural}`}
+              >
                 {METRIC_UNITS[pair.from].short}
-              </span>
+              </button>
             </div>
 
             <p id={hintId} className="calc-hint">
-              Decimals, negative numbers, and values up to one trillion are accepted.
-              Press Enter or click Convert.
+              Results update as you type. Decimals, negative numbers, and values up to
+              one trillion are accepted. Click the unit tag to switch direction.
             </p>
 
             <div className="calc-buttons">
@@ -248,7 +274,7 @@ export default function MetricCalculator({
             </>
           ) : (
             <p className="result-empty">
-              Enter a number and press Convert to see the answer.
+              Type a value above to see the conversion.
             </p>
           )}
         </div>

@@ -66,6 +66,27 @@ export default function Calculator({
     setError("");
   }, [prefillFromQuery, initialDirection]);
 
+  function handleLiveInput(raw: string) {
+    setInput(raw);
+    if (copyStatus) setCopyStatus("");
+
+    if (raw.trim() === "") {
+      setError("");
+      setResult(null);
+      return;
+    }
+
+    const validation = validateInput(raw, direction);
+    if (validation.value === undefined) {
+      setError(validation.error ?? "Please enter a valid number.");
+      setResult(null);
+      return;
+    }
+
+    setError("");
+    setResult(convert(validation.value, direction));
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const validation = validateInput(input, direction);
@@ -145,11 +166,7 @@ export default function Calculator({
                 autoComplete="off"
                 spellCheck={false}
                 value={input}
-                onChange={(event) => {
-                  setInput(event.target.value);
-                  if (error) setError("");
-                  if (copyStatus) setCopyStatus("");
-                }}
+                onChange={(event) => handleLiveInput(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     event.preventDefault();
@@ -159,14 +176,20 @@ export default function Calculator({
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${hintId} ${errorId}` : hintId}
               />
-              <span className="calc-unit-tag" aria-hidden="true">
+              <button
+                className="calc-unit-tag"
+                type="button"
+                onClick={handleSwap}
+                title={`Switch input from ${labels.from} to ${labels.to}`}
+                aria-label={`Switch input from ${labels.from} to ${labels.to}`}
+              >
                 {direction === "in-to-ft" ? "in" : "ft"}
-              </span>
+              </button>
             </div>
 
             <p id={hintId} className="calc-hint">
-              Decimals, negative numbers, and values up to one trillion are accepted.
-              Press Enter or click Convert.
+              Results update as you type. Decimals, negative numbers, and values up to
+              one trillion are accepted. Click the unit tag to switch direction.
             </p>
 
             <div className="calc-buttons">
@@ -250,7 +273,7 @@ export default function Calculator({
             </>
           ) : (
             <p className="result-empty">
-              Enter a number and press Convert to see the answer.
+              Type a value above to see the conversion.
             </p>
           )}
         </div>

@@ -34,6 +34,10 @@ beveled gray buttons, and square-cornered tables.
 ## Calculator behavior
 
 - Default value: `12` on the main inches-to-feet calculator.
+- Results update automatically while typing; the Convert button remains as an
+  optional fallback.
+- The unit tag at the right edge of the input (in/ft, cm/ft/m) is clickable and
+  switches the conversion direction; Swap Units does the same thing.
 - Supports decimals, negatives, zero, extra-large values, and keyboard Enter.
 - Home-page ruler compares inches and centimeters and updates its readout as the
   marker is dragged. It is explicitly labeled as an illustrative screen scale,
